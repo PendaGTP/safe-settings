@@ -32,6 +32,9 @@ serviceAccount:
 
 podAnnotations: {}
 
+# -- Labels to be added to the pod
+podLabels: {}
+
 podSecurityContext:
   {}
   # fsGroup: 2000
