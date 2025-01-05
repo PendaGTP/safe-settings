@@ -38,7 +38,7 @@ Refer to [Deploying using helm](https://github.com/github/safe-settings/blob/mai
 | containerSecurityContext.runAsNonRoot | bool | `true` |  |
 | containerSecurityContext.runAsUser | int | `1000` |  |
 | deploymentConfig | string | `""` | Safe-Settings deployment configuration |
-| env | list | `[]` | Environment variables to pass to safe-settings application |
+| env | object | `{}` | Environment variables to pass to safe-settings application |
 | envFrom | list | `[]` | envFrom to pass to safe-settings application |
 | extraObjects | list | `[]` | Array of extra K8s manifests to deploy supporting Helm templating |
 | fullnameOverride | string | `""` | String to fully override `"safe-settings.fullname"` |
