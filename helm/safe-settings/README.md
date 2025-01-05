@@ -37,20 +37,7 @@ Refer to [Deploying using helm](https://github.com/github/safe-settings/blob/mai
 | containerSecurityContext.readOnlyRootFilesystem | bool | `true` |  |
 | containerSecurityContext.runAsNonRoot | bool | `true` |  |
 | containerSecurityContext.runAsUser | int | `1000` |  |
-| deploymentConfig.configvalidators[0].error | string | `"`Admin cannot be assigned to collaborators`\n"` |  |
-| deploymentConfig.configvalidators[0].plugin | string | `"collaborators"` |  |
-| deploymentConfig.configvalidators[0].script | string | `"console.log(`baseConfig ${JSON.stringify(baseconfig)}`)\nreturn baseconfig.permission != 'admin'\n"` |  |
-| deploymentConfig.overridevalidators[0].error | string | `"`Branch protection required_approving_review_count cannot be overidden to a lower value`\n"` |  |
-| deploymentConfig.overridevalidators[0].plugin | string | `"branches"` |  |
-| deploymentConfig.overridevalidators[0].script | string | `"console.log(`baseConfig ${JSON.stringify(baseconfig)}`)\nconsole.log(`overrideConfig ${JSON.stringify(overrideconfig)}`)\nif (baseconfig.protection.required_pull_request_reviews.required_approving_review_count && overrideconfig.protection.required_pull_request_reviews.required_approving_review_count ) {\n  return overrideconfig.protection.required_pull_request_reviews.required_approving_review_count >= baseconfig.protection.required_pull_request_reviews.required_approving_review_count\n}\nreturn true\n"` |  |
-| deploymentConfig.overridevalidators[1].error | string | `"Some error\n"` |  |
-| deploymentConfig.overridevalidators[1].plugin | string | `"labels"` |  |
-| deploymentConfig.overridevalidators[1].script | string | `"return true\n"` |  |
-| deploymentConfig.restrictedRepos.exclude[0] | string | `"^admin$"` |  |
-| deploymentConfig.restrictedRepos.exclude[1] | string | `"^\\.github$"` |  |
-| deploymentConfig.restrictedRepos.exclude[2] | string | `"^safe-settings$"` |  |
-| deploymentConfig.restrictedRepos.exclude[3] | string | `".*-test"` |  |
-| deploymentConfig.restrictedRepos.include[0] | string | `"^test$"` |  |
+| deploymentConfig | string | `""` | Safe-Settings deployment configuration |
 | env | list | `[]` | Environment variables to pass to safe-settings application |
 | envFrom | list | `[]` | envFrom to pass to safe-settings application |
 | extraObjects | list | `[]` | Array of extra K8s manifests to deploy supporting Helm templating |
