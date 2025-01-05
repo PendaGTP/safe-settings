@@ -36,10 +36,13 @@ Common labels
 {{- define "safe-settings.labels" -}}
 helm.sh/chart: {{ include "safe-settings.chart" . }}
 {{ include "safe-settings.selectorLabels" . }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- if .Values.global.additionalLabels }}
+{{ tpl (toYaml .Values.global.additionalLabels) . }}
+{{- end }}
 {{- end }}
 
 {{/*

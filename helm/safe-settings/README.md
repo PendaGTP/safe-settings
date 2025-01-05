@@ -29,6 +29,7 @@ A Helm chart for Kubernetes
 | envFrom | list | `[]` |  |
 | extraObjects | list | `[]` | Add dynamic manifests via values. Example: extraObjects: - kind: ConfigMap   apiVersion: v1   metadata:     name: extra-cm-{{ .Release.Name }}   data: |     extra.yml: "does-my-install-need-extra-info: true" |
 | fullnameOverride | string | `""` |  |
+| global.additionalLabels | object | `{}` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"ghcr.io/github/safe-settings"` |  |
 | image.tag | string | `""` |  |
