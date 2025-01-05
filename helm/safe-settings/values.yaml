@@ -75,7 +75,10 @@ image:
 imagePullSecrets: []
 
 # -- Environment variables to pass to safe-settings application
-env: []
+env: {}
+  # APP_ID: change-me
+  # PRIVATE_KEY: change-me
+  # WEBHOOK_SECRET: change-me
 
 # -- envFrom to pass to safe-settings application
 envFrom: []
