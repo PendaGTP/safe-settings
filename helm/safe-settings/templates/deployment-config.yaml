@@ -3,6 +3,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ $fullName }}-deployment-config
+  labels:
+    {{- include "safe-settings.labels" . | nindent 4 }}
 data:
   deployment-settings.yml: |
     {{ .Values.deploymentConfig | toYaml | nindent 4 }}

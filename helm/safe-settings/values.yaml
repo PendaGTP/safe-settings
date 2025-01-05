@@ -2,6 +2,12 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+## Globally shared configuration
+global:
+  # -- Common labels for the all resources
+  additionalLabels: {}
+    # app: safe-settings
+
 replicaCount: 2
 
 image:
