@@ -7,4 +7,4 @@ metadata:
     {{- include "safe-settings.labels" . | nindent 4 }}
 data:
   deployment-settings.yml: |
-    {{ .Values.deploymentConfig | toYaml | nindent 4 }}
+    {{ .Values.deploymentConfig | nindent 4 }}
