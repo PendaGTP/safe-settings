@@ -2,115 +2,22 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-## Globally shared configuration
-global:
-  # -- Common labels for the all resources
-  additionalLabels: {}
-    # app: safe-settings
-
-replicaCount: 2
-
-image:
-  repository: ghcr.io/github/safe-settings
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
-
-imagePullSecrets: []
+# -- Provide a name in place of `safe-settings`
 nameOverride: ""
+# -- String to fully override `"safe-settings.fullname"`
 fullnameOverride: ""
 
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
-  automountServiceAccountToken: false
+## Globally shared configuration
+global:
+  # -- Additional labels to be added to all resources
+  additionalLabels: {}
 
-podAnnotations: {}
-
-# -- Labels to be added to the pod
-podLabels: {}
-
-podSecurityContext:
-  {}
-  # fsGroup: 2000
-
-securityContext:
-  allowPrivilegeEscalation: false
-  privileged: false
-  capabilities:
-    drop:
-      - ALL
-  readOnlyRootFilesystem: true
-  runAsNonRoot: true
-  runAsUser: 1000
-
-envFrom: []
-# - secretRef:
-#     name: app-env
-
-env: []
-
-service:
-  type: ClusterIP
-  port: 3000
-  annotations: {}
-
-ingress:
-  enabled: false
-  className: ""
-  annotations:
-    {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
-
-resources:
-  {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
-autoscaling:
-  enabled: false
-  minReplicas: 2
-  maxReplicas: 10
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
-
-volumeMounts: []
-
-volumes: []
-
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
-
+## Safe-Settings deployment configuration
+## Sample: https://github.com/github/safe-settings/blob/main-enterprise/docs/sample-settings/sample-deployment-settings.yml
 deploymentConfig:
   restrictedRepos:
     # You can exclude certain repos from safe-settings processing
-    #  If no file is specified, then the following repositories - 'admin', '.github', 'safe-settings' are exempted by default
+    # If no file is specified, then the following repositories - 'admin', '.github', 'safe-settings' are exempted by default
     exclude: ["^admin$", '^\.github$', "^safe-settings$", ".*-test"]
     # Alternatively you can only include certain repos
     include: ["^test$"]
@@ -138,12 +45,152 @@ deploymentConfig:
       script: |
         return true
 
-# -- Add dynamic manifests via values. Example:
-# extraObjects:
-# - kind: ConfigMap
-#   apiVersion: v1
-#   metadata:
-#     name: extra-cm-{{ .Release.Name }}
-#   data: |
-#     extra.yml: "does-my-install-need-extra-info: true"
+# -- The number of application pods to run
+replicaCount: 2
+
+## Safe-Settings application Horizontal Pod Autoscaler
+autoscaling:
+  # -- Enable Horizontal Pod Autoscaler
+  enabled: false
+  # -- Minimum number of replicas
+  minReplicas: 2
+  # -- Maximum number of replicas
+  maxReplicas: 10
+  # -- Average CPU utilization percentage
+  targetCPUUtilizationPercentage: 80
+  # -- Average memory utilization percentage
+  # targetMemoryUtilizationPercentage: 80
+
+## Application image
+image:
+  # -- Repository to use
+  repository: ghcr.io/github/safe-settings
+  # -- Overrides the image tag whose default is the chart appVersion
+  tag: ""
+  # -- Image pull policy
+  pullPolicy: "IfNotPresent"
+
+# -- Secrets with credentials to pull images from a private registry
+imagePullSecrets: []
+
+# -- Environment variables to pass to safe-settings application
+env: []
+
+# -- envFrom to pass to safe-settings application
+envFrom: []
+#  - configMapRef:
+#      name: config-map-name
+#  - secretRef:
+#      name: secret-name
+
+# -- Additional volumeMounts to mount
+volumeMounts: []
+#  - mountPath: /etc/tls
+#    name: kube-rbac-proxy-tls
+#    readOnly: true
+
+# -- Additional volumes to the server pod
+volumes: []
+#  - name: custom-tools
+#    emptyDir: {}
+
+# -- Annotations to be added to pods
+podAnnotations: {}
+
+# -- Labels to be added to pods
+podLabels: {}
+
+# -- Resource limits and requests for the application pods
+resources: {}
+#  limits:
+#    cpu: 100m
+#    memory: 128Mi
+#  requests:
+#    cpu: 100m
+#    memory: 128Mi
+
+# -- Safe-Settings application container ports
+containerPorts:
+  # -- Application container port
+  http: 3000
+
+# -- Toggle and define pod-level security context
+securityContext:
+  # runAsUser: 2000
+  # runAsGroup: 2000
+  # fsGroup: 2000
+
+## Application container-level security context
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  privileged: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+
+# -- Node selector
+nodeSelector: {}
+
+# -- Tolerations
+tolerations: []
+
+# -- Affinity
+affinity: {}
+
+## Safe-Settings application service configuration
+service:
+  # -- Service annotations
+  annotations: {}
+  # -- Service type
+  type: ClusterIP
+  # -- Service http port
+  port: 3000
+
+## Application service account
+## If create is set to true and name not set, a name is generated using the fullname template
+serviceAccount:
+  # -- Create a service account
+  create: true
+  # -- Service account name
+  name: "" # "safe-settings"
+  # -- Annotations applied to created service account
+  annotations: {}
+  # -- Automount API credentials for the Service Account
+  automountServiceAccountToken: false
+
+## Safe-Settings ingress configuration
+ingress:
+  # -- Enable and ingress resources
+  enabled: false
+  # -- Additional ingress annotations
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  # -- Defines which ingress controller will implement the resource
+  className: ""
+  ## Ingress hosts
+  hosts:
+    # -- Hostname
+    - host: "chart-example.local"
+      paths:
+        # -- The path to Safe-Settings application
+        - path: /
+          # -- Ingress path type
+          pathType: ImplementationSpecific
+  # -- Ingress TLS configuration
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+# -- Array of extra K8s manifests to deploy supporting Helm templating
 extraObjects: []
+  # - kind: ConfigMap
+  #   apiVersion: v1
+  #   metadata:
+  #     name: extra-cm-{{ .Release.Name }}
+  #   data: |
+  #     extra.yml: "does-my-install-need-extra-info: true"
