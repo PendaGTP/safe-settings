@@ -18,6 +18,65 @@ To regenerate this document, run:
 - Tested on {{ template "chart.kubeVersionLine" . }}
 - Helm v3.0.0+
 
+## Changelog
+
+### 1.0.0
+
+**Breaking Changes:**
+
+- Renamed security context values for better clarity:
+  - `.Values.podSecurityContext` is now `.Values.securityContext`
+  - `.Values.securityContext` is now `.Values.containerSecurityContext`
+- `.Values.deploymentConfig` is now a pre-formatted YAML string
+- `.Values.env` is now an object
+
+Before:
+
+```yml
+podSecurityContext:
+  # runAsUser: 2000
+  # ...
+
+securityContext:
+  allowPrivilegeEscalation: false
+  # ...
+
+deploymentConfig:
+  restrictedRepos:
+    # ...
+
+env:
+  - name: LOG_LEVEL
+    value: debug
+```
+
+After:
+
+```yml
+securityContext:
+  # runAsUser: 2000
+  # ...
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  # ...
+
+deploymentConfig: |
+  restrictedRepos:
+    # ...
+
+env:
+  LOG_LEVEL: debug
+```
+
+**Added:**
+
+- New `global.additionalLabels` parameter to add custom labels to all resources.
+
+**Changed:**
+
+- Modified Pod labeling strategy: now using `safe-settings.labels` instead of `safe-settings.selectorLabels`. This change allows updating Pod labels without modifying selectors, preventing unnecessary Pod replacements during label updates.
+
 ## Note
 
 The Helm Chart is published using OCI rather than a traditional charts registry.
