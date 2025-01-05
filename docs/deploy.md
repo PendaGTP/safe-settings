@@ -105,78 +105,9 @@ This will start the container in the background and detached.
 - Expose the app using a service
     `kubectl apply -f svc-safe-settings.yaml`
 
-### __Deploying using [helm](https://docs.helm.sh/using_helm/#Install-Helm)__
+### **Deploying using Helm**
 
-[Helm](https://helm.sh/) must be installed to use the charts. Please refer to Helm's [documentation](https://helm.sh/docs/) to get started.
-
-Once Helm is set up properly, view the latest Helm chart version:
-
-```bash
-helm show chart oci://ghcr.io/github/helm-charts/safe-settings
-```
-
-__Configure required values__
-
-See the values that can be configured.
-```bash
-helm show values oci://ghcr.io/github/helm-charts/safe-settings
-```
-
-Make sure to set the [Deployment Environment Variables](#deployment-environment-variables) in a `myvalues.yaml` file.
-
-Optionally, you can set other values like LOG_LEVEL. See [Environment variables](../README.md#environment-variables) for more details.
-
-You can also override the `deploymentConfig` value.
-
-__Install the chart__
-
-Set the values using `--values` (preferred approach)
-```bash
-helm install safe-settings oci://ghcr.io/github/helm-charts/safe-settings --values myvalues.yaml
-```
-
-Set the with values using `--set`
-
-```bash
-helm install safe-settings oci://ghcr.io/github/helm-charts/safe-settings --set appEnv.APP_ID="\"0000\"" --set appEnv.PRIVATE_KEY="TFM...==" --set appEnv.WEBHOOK_SECRET="ZjZlYTFjN...=="
-```
-
-> [!NOTE]
-> Setting up Ingress controller is out of scope of this doc, but is recommended.
-
-
-__If not doing an install using Helm. Generate Kubernetes YAMLs__
-```bash
-helm template safe-settings oci://ghcr.io/github/helm-charts/safe-settings --values myvalues.yaml
-```
-
-*See [helm repo](https://helm.sh/docs/helm/helm_repo/) for command documentation.*
-
-**Consider using a custom image**
-
-For production use cases one should consider to build a custom safe-settings app image which conforms to your org standards.
-
-Follow the instructions [here](#build-the-docker-container) on how to do it.
-
-
-> [!NOTE]
-> If you want a reproducible build then you should specify a non floating tag for the image `ghcr.io/github/safe-settings:2.1.10` .
-
-Once you built the image and pushed it to your registry you can specify it in your `values` file like this:
-
-```yaml
-image:
-  repository: custom-registry/safe-settings
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
-```
-
-In case you are using a private registry you can use `imagePullSecretName` to specify the name of the secret to use when pulling the image:
-
-```yaml
-imagePullSecrets: [regcred]
-```
+Chart documentation can be found here [helm/safe-settings/README.md](../helm/safe-settings/README.md).
 
 ### Glitch
 

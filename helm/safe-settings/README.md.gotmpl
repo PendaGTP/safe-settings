@@ -1,11 +1,13 @@
-# Github Safe-Settings Chart
+# GitHub Safe-Settings Chart
 
 A Helm chart for Safe-Settings, an app to manage policy-as-code and apply repository settings across an organization.
+
+To avoid storing sensitive information in version control, use the GitOps approach. For instance, instead of storing sensitive environment values (like private key and webhook secret) in your Helm values, deploy SealedSecrets or ExternalSecrets to manage Kubernetes secrets. These secrets can then be referenced in your Helm values.
 
 The documentation is generated with [helm-docs](https://github.com/norwoodj/helm-docs). This way it's ensure that values are consistent with the chart documentation.
 A simple script will execute the helm-docs docker container (so no need to downloading the binary).
 
-To regenerate this document, please run:
+To regenerate this document, run:
 
 ```shell
 ./helm/scripts/helm-docs.sh
@@ -16,9 +18,75 @@ To regenerate this document, please run:
 - Tested on {{ template "chart.kubeVersionLine" . }}
 - Helm v3.0.0+
 
-## Installing the Chart
+## Note
 
-Refer to [Deploying using helm](https://github.com/github/safe-settings/blob/main-enterprise/docs/deploy.md#deploying-using-helm).
+The Helm Chart is published using OCI rather than a traditional charts registry.
+
+> Standard commands like `helm search repo` and `helm repo add` don't work ([Helm issue related](https://github.com/helm/helm/issues/11000))
+
+To view the latest Helm chart tag:
+
+```shell
+helm show values oci://ghcr.io/github/helm-charts/safe-settings
+```
+
+To list chart tags:
+
+```shell
+$ docker run quay.io/skopeo/stable:latest list-tags docker://ghcr.io/github/helm-charts/safe-settings
+{
+  "Repository": "ghcr.io/github/helm-charts/safe-settings",
+  "Tags": [
+      "2.1.8",
+      "2.1.9",
+      "2.1.10",
+      "2.1.11",
+      "2.1.13",
+      "2.1.14"
+  ]
+}
+```
+
+To display the configuration layer:
+
+```shell
+$ docker run quay.io/skopeo/stable:latest inspect --config --raw docker://ghcr.io/github/helm-charts/safe-settings:2.1.14 | jq -r
+{
+  "name": "safe-settings",
+  "version": "2.1.14",
+  "description": "A Helm chart for Kubernetes",
+  "apiVersion": "v2",
+  "appVersion": "2.1.14",
+  "type": "application"
+}
+```
+
+## Install
+
+You can see the values that can be configured:
+
+```shell
+helm show values oci://ghcr.io/github/helm-charts/safe-settings
+# or using specific version
+# helm show values oci://ghcr.io/github/helm-charts/safe-settings --version 2.14
+```
+
+Review the default values, then **make sure to set the [Deployment Environment Variables](../../docs/deploy.md#deployment-environment-variables)** (by example using `envFrom:`, `helm ... --set` or `env:`)
+
+To install the chart:
+
+```shell
+# Using values
+helm install my-release oci://ghcr.io/github/helm-charts/safe-settings \
+  --values my-values.yml
+
+# Override or define additional values using `--set`
+helm install my-release oci://ghcr.io/github/helm-charts/safe-settings \
+  --values my-values.yml \
+  --set env.APP_ID=${APP_ID} \
+  --set env.PRIVATE_KEY=${PRIVATE_KEY} \
+  --set env.WEBHOOK_SECRET=${WEBHOOK_SECRET}
+```
 
 ## Values
 
