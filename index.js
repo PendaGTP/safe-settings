@@ -134,7 +134,7 @@ module.exports = (robot, { getRouter }, Settings = require('./lib/settings')) =>
   }
 
   function getAllChangedSubOrgConfigs (payload) {
-    const settingPattern = new Glob(`${env.CONFIG_PATH}/suborgs/*.yml`)
+    const settingPattern = Settings.SUB_ORG_PATTERN
     // Changes will be an array of files that were added
     const added = payload.commits.map(c => {
       return (c.added.filter(s => {
@@ -611,7 +611,7 @@ module.exports = (robot, { getRouter }, Settings = require('./lib/settings')) =>
       }))
     }
 
-    const subOrgChanges = getChangedSubOrgConfigName(new Glob(`${env.CONFIG_PATH}/suborgs/*.yml`), files, context.repo().owner)
+    const subOrgChanges = getChangedSubOrgConfigName(Settings.SUB_ORG_PATTERN, files, context.repo().owner)
     if (subOrgChanges.length) {
       return Promise.all(subOrgChanges.map(suborg => {
         return syncSubOrgSettings(true, context, suborg, context.repo(), pull_request.head.ref)
