@@ -28,7 +28,7 @@ module.exports = (robot, { getRouter }, Settings = require('./lib/settings')) =>
       if (nop) {
         let filename = env.SETTINGS_FILE_PATH
         if (!deploymentConfig) {
-          filename = env.DEPLOYMENT_CONFIG_FILE
+          filename = env.DEPLOYMENT_CONFIG_FILE_PATH
           deploymentConfig = {}
         }
         const nopcommand = new NopCommand(filename, repo, null, e, 'ERROR')
@@ -53,7 +53,7 @@ module.exports = (robot, { getRouter }, Settings = require('./lib/settings')) =>
       if (nop) {
         let filename = env.SETTINGS_FILE_PATH
         if (!deploymentConfig) {
-          filename = env.DEPLOYMENT_CONFIG_FILE
+          filename = env.DEPLOYMENT_CONFIG_FILE_PATH
           deploymentConfig = {}
         }
         const nopcommand = new NopCommand(filename, repo, null, e, 'ERROR')
@@ -78,7 +78,7 @@ module.exports = (robot, { getRouter }, Settings = require('./lib/settings')) =>
       if (nop) {
         let filename = env.SETTINGS_FILE_PATH
         if (!deploymentConfig) {
-          filename = env.DEPLOYMENT_CONFIG_FILE
+          filename = env.DEPLOYMENT_CONFIG_FILE_PATH
           deploymentConfig = {}
         }
         const nopcommand = new NopCommand(filename, repo, null, e, 'ERROR')
@@ -104,7 +104,7 @@ module.exports = (robot, { getRouter }, Settings = require('./lib/settings')) =>
       if (nop) {
         let filename = env.SETTINGS_FILE_PATH
         if (!deploymentConfig) {
-          filename = env.DEPLOYMENT_CONFIG_FILE
+          filename = env.DEPLOYMENT_CONFIG_FILE_PATH
           deploymentConfig = {}
         }
         const nopcommand = new NopCommand(filename, repo, null, e, 'ERROR')
@@ -123,7 +123,7 @@ module.exports = (robot, { getRouter }, Settings = require('./lib/settings')) =>
    */
   async function loadYamlFileSystem () {
     if (deploymentConfig === undefined) {
-      const deploymentConfigPath = env.DEPLOYMENT_CONFIG_FILE
+      const deploymentConfigPath = env.DEPLOYMENT_CONFIG_FILE_PATH
       if (fs.existsSync(deploymentConfigPath)) {
         deploymentConfig = yaml.load(fs.readFileSync(deploymentConfigPath))
       } else {
