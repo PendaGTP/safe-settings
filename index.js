@@ -270,11 +270,11 @@ module.exports = (robot, { getRouter }, Settings = require('./lib/settings')) =>
     }
 
     const settingsModified = payload.commits.find(commit => {
-      return commit.added.includes(Settings.FILE_NAME) ||
-        commit.modified.includes(Settings.FILE_NAME)
+      return commit.added.includes(Settings.FILE_PATH) ||
+        commit.modified.includes(Settings.FILE_PATH)
     })
     if (settingsModified) {
-      robot.log.debug(`Changes in '${Settings.FILE_NAME}' detected, doing a full synch...`)
+      robot.log.debug(`Changes in '${Settings.FILE_PATH}' detected, doing a full synch...`)
       return syncAllSettings(false, context)
     }
 
@@ -292,7 +292,7 @@ module.exports = (robot, { getRouter }, Settings = require('./lib/settings')) =>
       }))
     }
 
-    robot.log.debug(`No changes in '${Settings.FILE_NAME}' detected, returning...`)
+    robot.log.debug(`No changes in '${Settings.FILE_PATH}' detected, returning...`)
   })
 
   robot.on('create', async context => {
@@ -597,10 +597,10 @@ module.exports = (robot, { getRouter }, Settings = require('./lib/settings')) =>
     const changes = await context.octokit.repos.compareCommitsWithBasehead(params)
     const files = changes.data.files.map(f => { return f.filename })
 
-    const settingsModified = files.includes(Settings.FILE_NAME)
+    const settingsModified = files.includes(Settings.FILE_PATH)
 
     if (settingsModified) {
-      robot.log.debug(`Changes in '${Settings.FILE_NAME}' detected, doing a full synch...`)
+      robot.log.debug(`Changes in '${Settings.FILE_PATH}' detected, doing a full synch...`)
       return syncAllSettings(true, context, context.repo(), pull_request.head.ref)
     }
 
