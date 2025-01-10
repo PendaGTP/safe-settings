@@ -230,7 +230,7 @@ module.exports = (robot, { getRouter }, Settings = require('./lib/settings')) =>
     }
   }
 
-  async function syncInstallation (noop = false) {
+  async function syncInstallation (nop = false) {
     robot.log.trace('Fetching installations')
     const github = await robot.auth()
 
@@ -249,7 +249,7 @@ module.exports = (robot, { getRouter }, Settings = require('./lib/settings')) =>
         log: robot.log,
         repo: () => { return { repo: env.ADMIN_REPO, owner: installation.account.login } }
       }
-      return syncAllSettings(noop, context)
+      return syncAllSettings(nop, context)
     }
     return null
   }

@@ -1,14 +1,14 @@
 const appFn = require('./')
-const { FULL_SYNC_NOOP } = require('./lib/env')
+const { FULL_SYNC_NOP } = require('./lib/env')
 const { createProbot } = require('probot')
 
-async function performFullSync (appFn, noop) {
+async function performFullSync (appFn, nop) {
   const probot = createProbot()
-  probot.log.info(`Starting full sync with NOOP=${noop}`)
+  probot.log.info(`Starting full sync with NOP=${nop}`)
 
   try {
     const app = appFn(probot, {})
-    const settings = await app.syncInstallation(noop)
+    const settings = await app.syncInstallation(nop)
 
     if (settings.errors && settings.errors.length > 0) {
       probot.log.error('Errors occurred during full sync.')
@@ -22,7 +22,7 @@ async function performFullSync (appFn, noop) {
   }
 }
 
-performFullSync(appFn, FULL_SYNC_NOOP).catch((error) => {
+performFullSync(appFn, FULL_SYNC_NOP).catch((error) => {
   console.error('Fatal error during full sync:', error)
   process.exit(1)
 })
